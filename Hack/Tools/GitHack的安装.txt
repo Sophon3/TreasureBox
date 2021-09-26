@@ -1,0 +1,3 @@
+GitHack下载地址：` https://github.com/lijiejie/GitHack`
+
+运行命令：`python2 GitHack.py http://xxxxxxxxxxx/.git/`
