@@ -14,7 +14,7 @@
 
    ![](https://cdn.jsdelivr.net/gh/Sophon3/Figure-bed/images2021/2021202110102150732.png)
 
-3. you should download the PicGo in <https://github.com/Molunerfinn/PicGo >
+3. you should download the PicGo in <https://github.com/Molunerfinn/PicGo>
 
    the picture below shows PicGo installed.
 
