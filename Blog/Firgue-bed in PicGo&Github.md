@@ -6,7 +6,7 @@
 
 2. you need create a repository to store the images.
 
-   <img src="https://cdn.jsdelivr.net/gh/Sophon3/Figure-bed/images2021/2021202110102141732.png" style="zoom: 40%;" />
+   <img src="https://cdn.jsdelivr.net/gh/Sophon3/Figure-bed/images2021/2021202110102141732.png"  />
 
    ![](https://cdn.jsdelivr.net/gh/Sophon3/Figure-bed/images2021/2021202110102143066.png)
 
