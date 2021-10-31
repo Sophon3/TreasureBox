@@ -25,37 +25,35 @@ Input和output的消息提示用DOS系统功能09调用实现，输入字符串�
 要利用和处理好字符串结束符’$’。输出格式调整时，要输出两个字符即回车符0DH，0AH。
 
 ```assembly
-   DATAS SEGMENT
+DATAS SEGMENT
     STR1 DB "PLEASE INPUT A STRING:$"
     STR2 DB "               OUTPUT:$"
     STR3 DB "IF YOU WANT CONTINUE NETER THE /:$"
-    BUF DB 20    ;预定义4字节
+    BUF DB 20    ;
         DB '0'   ;输入完后自动获取输入的字符个数
         DB  20 DUP(0) ;初始化为0
     CODESTR DB 20 DUP('$')
-    CRLF DB 0AH,0DH,"$"
-
+    CRLF DB 0AH,0DH,"$" ;0AH回档，0DH，回车，CRLF就是换行
 DATAS ENDS
 
 STACKS SEGMENT
-
 STACKS ENDS
 
 CODES SEGMENT
-    ASSUME CS:CODES,DS:DATAS,SS:STACKS
-
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS   ;
 START:
     MOV AX, DATAS  ;初始化数据
     MOV DS, AX
-    CALL INPUTCODESTR
-    CALL ENCODE 
-    JMP EXIT
-
-INPUTCODESTR PROC
-    LEA DX, STR1
-    MOV AH, 09H
-    INT  21h
-    LEA DX,BUF
+BEGIN:  			;主程序
+    CALL INPUTCODESTR ;调用接收字符子程序
+    CALL ENCODE       ;调用加密子程序
+    JMP NEXT          ;结束程序
+    
+INPUTCODESTR PROC  ;子接收字符串程序
+    LEA DX, STR1   ;输出提示字符串1
+    MOV AH, 09H    ;DOS调用，09功能，在屏幕上显示字符串
+    INT  21h       ;INT是interupt缩写，INT 21H是DOS的中断调用命令
+    LEA DX,BUF     ;
     MOV AH, 0AH
     INT 21h
     MOV AL, BUF+1  ;给字符串末尾添加'$'结束符
@@ -69,7 +67,7 @@ INPUTCODESTR PROC
     INT 21h
     RET
     
-ENCODE PROC
+ENCODE PROC       ;加密子程序
     LEA SI,BUF+2
     LEA DI,CODESTR
     MOV CL,BUF+2
@@ -122,9 +120,12 @@ ENCODE_NEXT:
     INC SI
     INC DI
     LOOP ENCODE_AGAIN
+    INC DI
+    MOV [DI],'$'
 
 
 SHOWCODESTR:
+    MOV [DI],'$'
     LEA DX,STR2
     MOV AH,09H
     INT 21h
@@ -132,7 +133,24 @@ SHOWCODESTR:
     MOV AH,09H
     INT 21h
     RET
-   
+
+NEXT:
+    LEA DX,CRLF
+    MOV AH,09
+    INT 21h
+    LEA DX,STR3
+    MOV AH,09
+    INT 21h
+    MOV AH,1
+    INT 21h
+    MOV BH,AL
+    LEA DX,CRLF 
+    MOV AH,09
+    INT 21h
+    CMP BH,'/'
+    JE BEGIN
+    JMP EXIT
+
 EXIT:
     MOV AH, 4CH
     INT 21h
